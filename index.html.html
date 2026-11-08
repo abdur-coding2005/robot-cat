@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Blue Robot Cat’s Gadget World</title>
+<style>
+:root{--sky:#bfe6ff;--sky2:#e9f7ff;--ink:#12365c;--blue:#1b8de0;--white:#fff;--red:#ff4d4d;--yellow:#ffd23f;--card:#ffffff;--shadow:#0a3a6b33;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--sky:#0e2748;--sky2:#14325c;--ink:#e6f3ff;--card:#1b3f6e;--shadow:#00000066}}
+:root[data-theme="dark"]{--sky:#0e2748;--sky2:#14325c;--ink:#e6f3ff;--card:#1b3f6e;--shadow:#00000066}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;font-family:"Baloo 2","Trebuchet MS","Comic Sans MS",system-ui,sans-serif;color:var(--ink);background:linear-gradient(var(--sky),var(--sky2));min-height:100vh;overflow-x:hidden}
+h1{font-size:clamp(2rem,6vw,3.4rem);margin:.2em 0 0;text-align:center;line-height:1.05}
+.sub{text-align:center;margin:.3em 1em 0;font-size:1.1rem}
+#stage{position:relative;height:420px;max-width:760px;margin:10px auto 0;overflow:hidden}
+.cloud{position:absolute;font-size:3rem;opacity:.8;animation:drift 30s linear infinite}
+@keyframes drift{from{transform:translateX(-80px)}to{transform:translateX(900px)}}
+#cat{position:absolute;left:50%;bottom:10px;width:230px;margin-left:-115px;cursor:pointer;transition:transform .6s cubic-bezier(.3,1.4,.5,1),rotate .25s ease-out;filter:drop-shadow(0 10px 8px var(--shadow))}
+#cat:hover{transform:rotate(-3deg) scale(1.04)}
+#cat.fly{transform:translateY(-230px) rotate(6deg)}
+#cat.shrink{transform:scale(.4) translateY(60px)}
+#cat.spin{animation:spin 1.2s ease}
+@keyframes spin{to{transform:rotate(720deg) scale(1.1)}}
+#cat.bounce{animation:bounce .5s 2}
+@keyframes bounce{50%{transform:translateY(-30px)}}
+#cat.invis{opacity:.15}
+#cat.big{transform:scale(1.35)}
+#cat.zzz{transform:rotate(-8deg) translateY(10px)}
+#cat.dance{animation:dance .5s 4}
+@keyframes dance{25%{transform:rotate(-12deg) translateY(-14px)}75%{transform:rotate(12deg) translateY(-14px)}}
+.trail{position:fixed;pointer-events:none;z-index:50;font-size:1rem;margin:-8px 0 0 -8px;animation:fade .8s ease-out forwards}
+@keyframes fade{to{transform:translateY(26px) scale(.3);opacity:0}}
+.chat{max-width:560px;margin:0 auto;padding:0 18px}
+#log{background:var(--card);border:3px solid var(--ink);border-radius:22px;padding:12px 16px;min-height:90px;max-height:210px;overflow-y:auto}
+#log p{margin:.35em 0}
+#log .me{text-align:right;color:var(--blue);font-weight:700}
+.chat form{display:flex;gap:8px;margin-top:12px}
+input{flex:1;min-width:0;font:inherit;padding:10px 16px;border:3px solid var(--ink);border-radius:999px;background:var(--card);color:var(--ink)}
+input:focus-visible{outline:4px solid var(--yellow)}
+#bubble{position:absolute;left:50%;top:6px;transform:translateX(-50%);background:var(--card);border:3px solid var(--ink);border-radius:22px;padding:10px 18px;font-size:1.2rem;font-weight:700;max-width:88%;text-align:center;box-shadow:0 6px 0 var(--shadow)}
+#bubble::after{content:"";position:absolute;left:50%;bottom:-16px;margin-left:-10px;border:10px solid transparent;border-top-color:var(--ink)}
+.pop{position:absolute;font-size:2rem;pointer-events:none;animation:rise 2s ease-out forwards}
+@keyframes rise{to{transform:translateY(-260px) scale(1.5);opacity:0}}
+#door{position:absolute;right:6%;bottom:10px;width:90px;height:150px;perspective:400px;display:none}
+#door.show{display:block}
+#door .frame{position:absolute;inset:0;background:radial-gradient(circle,#ffe29a,#ff9ec4,#7a6bff);border:5px solid #ff7bb0;border-radius:6px;display:grid;place-items:center;font-size:3rem}
+#door .leaf{position:absolute;inset:0;background:#ff7bb0;border-radius:6px;transform-origin:left;transition:transform .8s}
+#door.open .leaf{transform:rotateY(-110deg)}
+.tools{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:8px 12px}
+button{font:inherit;font-weight:700;color:#fff;background:var(--blue);border:3px solid var(--ink);border-radius:999px;padding:10px 20px;cursor:pointer;box-shadow:0 5px 0 var(--ink);transition:transform .1s,box-shadow .1s}
+button:active{transform:translateY(4px);box-shadow:0 1px 0 var(--ink)}
+button:focus-visible{outline:4px solid var(--yellow);outline-offset:3px}
+.love{background:var(--red)}
+h2{text-align:center;font-size:1.8rem;margin:1.4em 0 .2em}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px;max-width:960px;margin:0 auto;padding:12px 18px 10px}
+.gadget{background:var(--card);border:3px solid var(--ink);border-radius:26px;padding:18px;text-align:center;cursor:pointer;box-shadow:0 8px 0 var(--shadow);color:var(--ink);font-weight:400;border-radius:26px}
+.gadget:hover{transform:translateY(-4px) rotate(-1deg)}
+.gadget .em{font-size:3.4rem;display:block}
+.gadget b{display:block;font-size:1.3rem}
+.gadget span.d{font-size:.95rem}
+.game{max-width:560px;margin:0 auto;text-align:center;padding:0 18px}
+#score{font-size:1.4rem;font-weight:700}
+footer{text-align:center;padding:30px 16px 40px;font-size:.95rem}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<h1>Blue Robot Cat’s Gadget World 💙</h1>
+<p class="sub">Tap the cat. Tap a gadget. Something fun happens every time!</p>
+
+<div id="stage">
+  <span class="cloud" style="top:60px">☁️</span><span class="cloud" style="top:150px;animation-delay:-12s">☁️</span>
+  <div id="bubble">Tap me! I’ve got gadgets from the future!</div>
+  <div id="door"><div class="frame">🌴</div><div class="leaf"></div></div>
+  <svg id="cat" viewBox="0 0 200 230" role="button" aria-label="Blue robot cat, tap to say hello" tabindex="0">
+    <ellipse cx="100" cy="165" rx="52" ry="52" fill="#1b8de0" stroke="#12365c" stroke-width="4"/>
+    <ellipse cx="100" cy="178" rx="32" ry="34" fill="#fff" stroke="#12365c" stroke-width="3"/>
+    <path d="M70 172 q30 28 60 0" fill="none" stroke="#12365c" stroke-width="3"/>
+    <circle cx="48" cy="190" r="15" fill="#fff" stroke="#12365c" stroke-width="3"/>
+    <circle cx="152" cy="190" r="15" fill="#fff" stroke="#12365c" stroke-width="3"/>
+    <ellipse cx="80" cy="218" rx="18" ry="9" fill="#fff" stroke="#12365c" stroke-width="3"/>
+    <ellipse cx="120" cy="218" rx="18" ry="9" fill="#fff" stroke="#12365c" stroke-width="3"/>
+    <circle cx="100" cy="82" r="64" fill="#1b8de0" stroke="#12365c" stroke-width="4"/>
+    <polygon points="52,38 44,8 78,26" fill="#1b8de0" stroke="#12365c" stroke-width="4"/>
+    <polygon points="148,38 156,8 122,26" fill="#1b8de0" stroke="#12365c" stroke-width="4"/>
+    <ellipse cx="100" cy="94" rx="48" ry="44" fill="#fff" stroke="#12365c" stroke-width="3"/>
+    <ellipse cx="82" cy="60" rx="15" ry="20" fill="#fff" stroke="#12365c" stroke-width="3"/>
+    <ellipse cx="118" cy="60" rx="15" ry="20" fill="#fff" stroke="#12365c" stroke-width="3"/>
+    <circle id="eyeL" cx="86" cy="64" r="6" fill="#12365c"/><circle id="eyeR" cx="114" cy="64" r="6" fill="#12365c"/>
+    <circle cx="88" cy="62" r="2" fill="#fff"/><circle cx="116" cy="62" r="2" fill="#fff"/>
+    <circle cx="100" cy="86" r="9" fill="#ff8a1f" stroke="#12365c" stroke-width="2.5"/>
+    <line x1="100" y1="95" x2="100" y2="118" stroke="#12365c" stroke-width="3"/>
+    <path id="mouth" d="M62 108 q38 38 76 0" fill="#ff7b8a" stroke="#12365c" stroke-width="3"/>
+    <g stroke="#12365c" stroke-width="2.5"><line x1="30" y1="84" x2="64" y2="90"/><line x1="28" y1="102" x2="62" y2="100"/><line x1="170" y1="84" x2="136" y2="90"/><line x1="172" y1="102" x2="138" y2="100"/></g>
+    <rect x="50" y="138" width="100" height="14" rx="7" fill="#8a4fff" stroke="#12365c" stroke-width="3"/>
+    <circle cx="100" cy="160" r="9" fill="#ffd23f" stroke="#12365c" stroke-width="3"/>
+  </svg>
+</div>
+
+<div class="tools">
+  <button class="love" id="loveBtn">Say it! 💖</button>
+  <button id="randBtn">🎲 Surprise gadget</button>
+  <button id="themeBtn">🌙 Night mode</button>
+</div>
+
+<h2>Gadgets from the pocket</h2>
+<div class="grid" id="grid"></div>
+
+<h2>Chat with me 💬</h2>
+<div class="chat"><div id="log" aria-live="polite"><p>🐱 Type something! Try “hi”, “tell me a joke”, “my name is …” or a gadget name like “rocket”.</p></div>
+<form id="chatForm"><input id="msg" placeholder="Say something…" autocomplete="off" aria-label="Message"><button type="submit">Send</button></form></div>
+
+<h2>Feed the cat!</h2>
+<div class="game">
+  <p>The cat loves sweet bean pancakes. Tap to feed.</p>
+  <button id="feed">🥞 Feed a pancake</button>
+  <p id="score">Pancakes eaten: 0</p>
+</div>
+
+<footer>Made with 💙 — a fan-style tribute to blue robot cats and the gadgets we all wish we had.</footer>
+
+<script>
+const $=s=>document.querySelector(s);
+const cat=$('#cat'),bubble=$('#bubble'),stage=$('#stage'),door=$('#door'),mouth=$('#mouth');
+let bt;
+function say(t){bubble.textContent=t;mouth.setAttribute('d','M62 104 q38 52 76 0');clearTimeout(bt);bt=setTimeout(()=>mouth.setAttribute('d','M62 108 q38 38 76 0'),1800)}
+function pop(list,n=10){for(let i=0;i<n;i++){const s=document.createElement('span');s.className='pop';s.textContent=list[Math.floor(Math.random()*list.length)];s.style.left=(10+Math.random()*80)+'%';s.style.bottom=(20+Math.random()*80)+'px';s.style.animationDelay=(Math.random()*.5)+'s';stage.appendChild(s);setTimeout(()=>s.remove(),2800)}}
+function anim(c,ms=1300){cat.classList.add(c);setTimeout(()=>cat.classList.remove(c),ms)}
+const loves=['Heyy, I love you! 💙','Heyy! You’re my best friend, I love you! 💖','Heyyy! I love you more than pancakes! 🥞💙','Heyy, I love you! Let’s go on an adventure! 🚀'];
+function love(){say(loves[Math.floor(Math.random()*loves.length)]);anim('bounce',1100);pop(['💙','💖','💕','✨'],14)}
+cat.addEventListener('click',love);
+cat.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();love()}});
+$('#loveBtn').onclick=love;
+
+const jokes=['Why did the robot cat sit on the computer? To keep an eye on the mouse! 😹','What do robot cats eat for breakfast? Mouse-tacos and pancakes! 🥞','Why was the gadget so calm? It had great battery life! 🔋','What’s a cat’s favourite colour? Purr-ple! 💜'];
+const facts=['Honey never spoils, so keep your sweets safe!','Octopuses have three hearts!','A day on Venus is longer than its year!','Bananas are technically berries!'];
+const places=['🏝️','🗼','🏔️','🎡','🌋','🛕','🏰','🌌'];
+const langs=['Je t’aime (French)','Te quiero (Spanish)','Naan unna kaadhalikkaren (Tamil)','Ich liebe dich (German)','Aishiteru (Japanese)','Main tumse pyaar karta hoon (Hindi)'];
+const gadgets=[
+ {e:'🚪',n:'Magic Door',d:'Open it and go anywhere!',f(){door.classList.add('show');door.classList.remove('open');door.querySelector('.frame').textContent=places[Math.floor(Math.random()*places.length)];setTimeout(()=>door.classList.add('open'),100);say('Heyy! Let’s visit somewhere new, I love adventures with you! 💙');pop(['✨','🌈','⭐'],10);setTimeout(()=>door.classList.remove('show'),5000)}},
+ {e:'🚁',n:'Sky Copter',d:'A tiny propeller for your head.',f(){say('Wheee! Look at me fly! Heyy, I love you! 🚁');anim('fly',2500);pop(['☁️','🕊️','💨'],8)}},
+ {e:'⏰',n:'Time Machine',d:'Zoom to the future!',f(){const y=2100+Math.floor(Math.random()*200);say('Time travel to the year '+y+'! Even there, I love you! ⏳');anim('spin');pop(['⏰','🔮','⚡'],10)}},
+ {e:'🎒',n:'Wish Pocket',d:'Reach in and see what appears.',f(){const items=['🍰','🎈','🔦','🧸','🎮','🍦','🪁','🎁'];const i=items[Math.floor(Math.random()*items.length)];say('Ta-daaa! I found '+i+' for you! Heyy, I love you! 🎒');pop([i],6)}},
+ {e:'🍬',n:'Translate Gummy',d:'Speak every language.',f(){say('Heyy! '+langs[Math.floor(Math.random()*langs.length)]+' 💬');anim('bounce');pop(['💬','🍬','💖'],8)}},
+ {e:'🔦',n:'Shrink Light',d:'Make big things tiny.',f(){say('Eek, I’m tiny now! Still loving you big time! 💙');anim('shrink',2000);pop(['🔍','✨'],6)}}
+,
+ {e:'🫥',n:'Invisible Cloak',k:'invisible',d:'Now you see me, now you don’t.',f(){say('Now you see me… now you don’t! Heyy, I love you! 🫥');anim('invis',2200);pop(['✨'],6)}},
+ {e:'🤗',n:'Giant Light',k:'giant',d:'Grow big for the biggest hug.',f(){say('I’m HUGE! Big hug, I love you! 🤗');anim('big',2000);pop(['💙','🤗'],8)}},
+ {e:'🌈',n:'Rainbow Slide',k:'rainbow',d:'Slide down the sky.',f(){say('Wheee! Slide with me! 🌈');anim('bounce');pop(['🌈','🎢','⭐'],14)}},
+ {e:'🍞',n:'Memory Snack',k:'memory',d:'Eat it, learn a fun fact.',f(){say('Memory snack! '+facts[Math.floor(Math.random()*facts.length)]+' 🍞');pop(['🧠','🍞'],6)}},
+ {e:'☔',n:'Rain Umbrella',k:'umbrella',d:'Makes it rain on command.',f(){say('Rain, rain, go away! Heyy, I love you! ☔');pop(['🌧️','💧','☔'],16)}},
+ {e:'🚀',n:'Rocket Boots',k:'rocket',d:'3, 2, 1… blast off!',f(){say('3, 2, 1… blast off! 🚀');anim('fly',2000);pop(['🔥','🚀','💨'],10)}},
+ {e:'😴',n:'Dream Pillow',k:'dream',d:'Instant cozy nap.',f(){say('Zzz… I love you… zzz 😴');anim('zzz',2500);pop(['💤','🌙','⭐'],8)}},
+ {e:'💘',n:'Love Meter',k:'meter',d:'How much love is in the air?',f(){say('Love meter says '+(96+Math.floor(Math.random()*5))+'%! Heyy, I love you! 💘');pop(['💘','💖'],12)}},
+ {e:'🎵',n:'Dance Player',k:'dance',d:'Music that makes you boogie.',f(){say('Let’s dance! 🎵');anim('dance',2100);pop(['🎵','🎶','💃'],12)}},
+ {e:'🎩',n:'Joke Hat',d:'Pull out a funny joke.',f(){say(jokes[Math.floor(Math.random()*jokes.length)]);anim('bounce');pop(['😹','🎩'],8)}}
+];
+const grid=$('#grid');
+gadgets.forEach(g=>{const b=document.createElement('button');b.className='gadget';b.innerHTML='<span class="em">'+g.e+'</span><b>'+g.n+'</b><span class="d">'+g.d+'</span>';b.onclick=()=>g.f();grid.appendChild(b)});
+$('#randBtn').onclick=()=>gadgets[Math.floor(Math.random()*gadgets.length)].f();
+
+let uname='';
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const rules=[
+ [/love|luv/,['I love you too! 💙','Heyy, I love you the most! 💖']],
+ [/how are you|how r u/,['I’m super happy now that you’re here! 😄','Fantastic! My pocket is full of gadgets! 🎒']],
+ [/your name|who are you/,['I’m your blue robot cat friend from the future! 🐱🤖']],
+ [/hungry|food|pancake|eat/,['Pancakes, please! 🥞','Did someone say pancakes? 🥞😋']],
+ [/joke|funny/,jokes],
+ [/sad|cry|tired|bad day/,['Aww, come here. Heyy, I love you, and tomorrow will be better! 💙','Let’s go somewhere calm. I’m right here with you! 🚪']],
+ [/thank/,['Anytime, friend! 💙']],
+ [/bye|good night/,['Bye bye! Heyy, I love you! Come back soon! 👋','Sweet dreams! 🌙💙']],
+ [/\b(hi|hello|hey|hola|vanakkam)\b/,['Heyy! So happy to see you! 💙','Hello hello! Want to try a gadget? 🎒']],
+ [/gadget|pocket/,['Tap any gadget below, or type its name like “rocket”! 🎒']]
+];
+const log=$('#log');
+function addLog(c,t){const p=document.createElement('p');if(c==='me')p.className='me';p.textContent=(c==='me'?'':'🐱 ')+t;log.appendChild(p);log.scrollTop=log.scrollHeight}
+$('#chatForm').addEventListener('submit',e=>{e.preventDefault();const inp=$('#msg');const raw=inp.value.trim();if(!raw)return;inp.value='';addLog('me',raw);const t=raw.toLowerCase();say('…typing…');
+ setTimeout(()=>{let r;const nm=t.match(/my name is ([a-z]+)/);
+  if(nm){uname=nm[1][0].toUpperCase()+nm[1].slice(1);r='Nice to meet you, '+uname+'! Heyy, I love you! 💙';say(r);pop(['💙','✨'],8)}
+  else{const g=gadgets.find(x=>t.includes(x.n.toLowerCase())||(x.k&&t.includes(x.k)));
+   if(g){g.f();r=bubble.textContent}
+   else{const m=rules.find(x=>x[0].test(t));r=m?pick(m[1]):pick(['Hmm, tell me more! 🤔','Ooh, interesting! Heyy, I love you anyway! 💙','I didn’t catch that, but ask me for a joke or a gadget! 🎒']);
+    if(uname&&Math.random()<.4)r=uname+', '+r.charAt(0).toLowerCase()+r.slice(1);say(r);pop(['💙'],4)}}
+  addLog('cat',r)},650)});
+
+let eaten=0;
+$('#feed').onclick=()=>{eaten++;$('#score').textContent='Pancakes eaten: '+eaten;
+ const msgs=['Yummm! 🥞','Om nom nom! So good!','More please! Heyy, I love you for this! 💙'];
+ say(eaten%5===0?'WOW '+eaten+' pancakes! Heyy, I love you so much! 💖':msgs[eaten%3]);
+ anim('bounce',1000);pop(['🥞','😋'],5);if(eaten%5===0)pop(['💖','🎉'],14)};
+
+let lt=0;
+document.addEventListener('pointermove',e=>{const r=cat.getBoundingClientRect();const dx=Math.max(-4,Math.min(4,(e.clientX-(r.left+r.width/2))/50));const dy=Math.max(-3,Math.min(3,(e.clientY-(r.top+r.height/3))/50));
+ $('#eyeL').setAttribute('cx',86+dx);$('#eyeR').setAttribute('cx',114+dx);$('#eyeL').setAttribute('cy',64+dy);$('#eyeR').setAttribute('cy',64+dy);cat.style.rotate=(dx*.9)+'deg';
+ const n=Date.now();if(n-lt>70){lt=n;const s=document.createElement('span');s.className='trail';s.textContent=pick(['💙','✨','⭐']);s.style.left=e.clientX+'px';s.style.top=e.clientY+'px';document.body.appendChild(s);setTimeout(()=>s.remove(),800)}});
+$('#themeBtn').onclick=()=>{const d=document.documentElement;const dark=d.dataset.theme==='dark'||(d.dataset.theme!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches);d.dataset.theme=dark?'light':'dark';$('#themeBtn').textContent=dark?'🌙 Night mode':'☀️ Day mode'};
+</script>
+</body>
+</html>
